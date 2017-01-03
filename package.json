@@ -1,0 +1,24 @@
+{
+  "name": "pronto",
+  "version": "0.0.1",
+  "description": "A JavaScript framework for testing performance",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrjpierce/pronto.git"
+  },
+  "keywords": [
+    "test",
+    "benchmark",
+    "performance"
+  ],
+  "author": "James M Pierce",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/mrjpierce/pronto/issues"
+  },
+  "homepage": "https://github.com/mrjpierce/pronto#readme"
+}
