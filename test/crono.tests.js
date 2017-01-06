@@ -1,6 +1,7 @@
 const assert = require('assert');
 const sinon = require('sinon');
 
+const itCase = require('./../lib/mocha-itcase/mocha-itcase');
 const pronto = require('./../lib/pronto');
 const Crono = pronto.Crono;
 
@@ -29,15 +30,22 @@ describe('Crono', () => {
         assert(sutFunctionSpy.calledOnce);
     });
 
-    it('passes arguments to fut', () => {
-        // Arrange
-        let crono = new Crono(testObject, 'fut', 1);
+    [
+        {args: [1,2,3], expected: [1,2,3]},
+        {args: [4,5,6], expected: [4,5,6]}
+    ]
+    .forEach((test) => {
+        let { args, expected } = test;
+        it('passes arguments to fut', () => {
+            // Arrange
+            let crono = new Crono(testObject, 'fut', 1);
 
-        // Act
-        testObject.fut(1, 2, 3);
+            // Act
+            testObject.fut(...args);
 
-        // Assert
-        assert(sutFunctionSpy.calledWithExactly(1, 2, 3));
+            // Assert
+            assert(sutFunctionSpy.calledWithExactly(...expected));
+        });
     });
 
     [
@@ -46,16 +54,32 @@ describe('Crono', () => {
         {repeatCount: null, expected: 10} // default
     ]
     .forEach((test) => {
-        it(`calls fut the amount of times passed to constructor (${test.repeatCount}, ${test.expected})`, () => {
+        let { repeatCount, expected } = test;
+        it(`calls fut the amount of times passed to constructor (${repeatCount}, ${expected})`, () => {
             // Arrange
-            let crono = new Crono(testObject, 'fut', test.repeatCount);
+            let crono = new Crono(testObject, 'fut', repeatCount);
 
             // Act
             testObject.fut(1, 2, 3);
 
             // Assert
-            assert.equal(sutFunctionSpy.callCount, test.expected);
+            assert.equal(sutFunctionSpy.callCount, expected);
         });
+    });
+
+    itCase('calls fut the amount of times passed to constructor', [
+        {repeatCount: 1, expected: 1},
+        {repeatCount: 2, expected: 2},
+        {repeatCount: null, expected: 10} // default
+    ], (repeatCount, expected) => {
+        // Arrange
+        let crono = new Crono(testObject, 'fut', repeatCount);
+
+        // Act
+        testObject.fut(1, 2, 3);
+
+        // Assert
+        assert.equal(sutFunctionSpy.callCount, expected);
     });
 
 /*    it('calls setup fuandfajdjfnon', () => {
