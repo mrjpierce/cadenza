@@ -1,7 +1,6 @@
 const assert = require('assert');
 const sinon = require('sinon');
 
-const itCase = require('./../lib/mocha-itcase/mocha-itcase');
 const pronto = require('./../lib/pronto');
 const Crono = pronto.Crono;
 
@@ -65,21 +64,6 @@ describe('Crono', () => {
             // Assert
             assert.equal(sutFunctionSpy.callCount, expected);
         });
-    });
-
-    itCase('calls fut the amount of times passed to constructor', [
-        {repeatCount: 1, expected: 1},
-        {repeatCount: 2, expected: 2},
-        {repeatCount: null, expected: 10} // default
-    ], (repeatCount, expected) => {
-        // Arrange
-        let crono = new Crono(testObject, 'fut', repeatCount);
-
-        // Act
-        testObject.fut(1, 2, 3);
-
-        // Assert
-        assert.equal(sutFunctionSpy.callCount, expected);
     });
 
 /*    it('calls setup fuandfajdjfnon', () => {
