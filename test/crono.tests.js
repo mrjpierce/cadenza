@@ -8,56 +8,34 @@ const itCase = require('mocha-itcase');
 
 describe('Crono', () => {
 
-    let sutFunctionSpy = sinon.spy();
-    let testObject = {
-        fut: sutFunctionSpy
-    };
+    let setupFunc;
+    let subjectFunc;
+    let teardownFunc;
+    
 
     beforeEach(() => {
-        sutFunctionSpy = sinon.spy();
-        testObject = {
-            fut: sutFunctionSpy
-        };
+        setupFunc = sinon.spy();
+        subjectFunc = sinon.spy();
+        teardownFunc = sinon.spy();
     });
 
-    it('calls fut', () => {
+    itCase('calls setup, subject, teardown the corect number of times', [
+        { runCount: 1,    expected: 1 },
+        { runCount: 5,    expected: 5 },
+        { runCount: null, expected: 10 } // Default
+    ], (runCount, expected) => {
         // Arrange
-        let crono = new Crono(testObject, 'fut', 1);
+        let crono = new Crono()
+            .setup(setupFunc)
+            .teardown(teardownFunc);
 
         // Act
-        testObject.fut();
+        crono.test(subjectFunc, runCount);
 
         // Assert
-        assert(sutFunctionSpy.calledOnce);
-    });
-
-    itCase('passes arguments to fut', [
-        {args: [1,2,3], expected: [1,2,3]},
-        {args: [4,5,6], expected: [4,5,6]}
-    ], (args, expected) => {
-         // Arrange
-        let crono = new Crono(testObject, 'fut', 1);
-
-        // Act
-        testObject.fut(...args);
-
-        // Assert
-        assert(sutFunctionSpy.calledWithExactly(...expected));
-    });
-
-    itCase('calls fut the amount of times passed to constructor', [
-        {repeatCount: 1, expected: 1},
-        {repeatCount: 2, expected: 2},
-        {repeatCount: null, expected: 10} // default
-    ], (repeatCount, expected) => {
-        // Arrange
-        let crono = new Crono(testObject, 'fut', repeatCount);
-
-        // Act
-        testObject.fut(1, 2, 3);
-
-        // Assert
-        assert.equal(sutFunctionSpy.callCount, expected);
+        assert(setupFunc.called === expected);
+        assert(subjectFunc.called === expected);
+        assert(teardownFunc.called === expected);
     });
 
 /*    it('calls setup fuandfajdjfnon', () => {
@@ -84,9 +62,19 @@ describe('Crono', () => {
             .setup(x => x.doAThingFirst)
             .teardown(x => x.destroy);
 
-        testObject.testFunc();
+        crono.test();
 
         assert(crono.timeSpan <= Time.ms(1));
+    });
 
-    });*/
-});
+     it('calls setup fuandfajdjfnon', () => {
+        let testObject = { testFunc: () => {}};
+        let crono = new Crono()
+            .setup(x => x.doAThingFirst)
+            .teardown(x => x.destroy);
+
+        crono.test(10, testObject.testFunc);
+
+        assert(crono.timeSpan <= Time.ms(1));
+    });
+});*/
