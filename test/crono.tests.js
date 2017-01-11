@@ -11,7 +11,6 @@ describe('Crono', () => {
     let setupFunc;
     let subjectFunc;
     let teardownFunc;
-    
 
     beforeEach(() => {
         setupFunc = sinon.spy();
