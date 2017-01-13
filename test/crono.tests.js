@@ -32,29 +32,39 @@ describe('Crono', () => {
         crono.test(subjectFunc, runCount);
 
         // Assert
-        assert(setupFunc.called === expected);
-        assert(subjectFunc.called === expected);
-        assert(teardownFunc.called === expected);
+        assert(setupFunc.callCount === expected);
+        assert(subjectFunc.callCount === expected);
+        assert(teardownFunc.callCount === expected);
     });
 
-/*    it('calls setup fuandfajdjfnon', () => {
+    itCase('returns median correctly', [
+        { startTimes: [[0,0], [0,0], [0,0], [0,0]], 
+            endTimes: [[0,5000000], [0,4000000], [0,3000000], [0,2000000]], 
+            expected: 4 },
+        { startTimes: [[0,0], [0,0], [0,0], [0,0]], 
+            endTimes: [[0,10000000], [0,7000000], [0,6000000], [0,5000000]], 
+            expected: 6 } 
+    ], (startTimes, endTimes, expected) => {
+        // Arrange
         let crono = new Crono();
+        let hrTimeStub = sinon.stub(process, 'hrtime');
+        for (var i = 0; i <= startTimes.length; i++) {
+            hrTimeStub.onCall(i * 2).returns(startTimes[i])
+                .onCall((i * 2) + 1).returns(endTimes[i]);
+        }
 
-        crono.setup(() => {
+        crono.test(() => {}, startTimes.length);
 
-        });
+        // Act
+        let result = crono.medianRunTimeMS;
 
-        crono.sut(() => {
-            
-        });
+        // Assert
+        assert(result === expected);
 
-        crono.teardown(() => {
-            
-        });
-
-        crono.test(number);
+        hrTimeStub.restore(); // Restore original method
     });
 
+/*
     it('calls setup fuandfajdjfnon', () => {
         let testObject = { testFunc: () => {}};
         let crono = new Crono(testObject, 'testFunc', 10)
@@ -75,5 +85,5 @@ describe('Crono', () => {
         crono.test(10, testObject.testFunc);
 
         assert(crono.timeSpan <= Time.ms(1));
-    });
-});*/
+    });*/
+});
