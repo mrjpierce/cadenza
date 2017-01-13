@@ -1,12 +1,10 @@
 const assert = require('assert');
 const sinon = require('sinon');
-
-const pronto = require('./../lib/pronto');
-const Crono = pronto.Crono;
-
 const itCase = require('mocha-itcase');
 
-describe('Crono', () => {
+const Coach = require('./../lib/coach');
+
+describe('Coach', () => {
 
     let setupFunc;
     let subjectFunc;
@@ -24,12 +22,12 @@ describe('Crono', () => {
         { runCount: null, expected: 10 } // Default
     ], (runCount, expected) => {
         // Arrange
-        let crono = new Crono()
+        let coach = new Coach()
             .setup(setupFunc)
             .teardown(teardownFunc);
 
         // Act
-        crono.test(subjectFunc, runCount);
+        coach.test(subjectFunc, runCount);
 
         // Assert
         assert(setupFunc.callCount === expected);
@@ -46,44 +44,21 @@ describe('Crono', () => {
             expected: 6 } 
     ], (startTimes, endTimes, expected) => {
         // Arrange
-        let crono = new Crono();
+        let coach = new Coach();
         let hrTimeStub = sinon.stub(process, 'hrtime');
         for (var i = 0; i <= startTimes.length; i++) {
             hrTimeStub.onCall(i * 2).returns(startTimes[i])
                 .onCall((i * 2) + 1).returns(endTimes[i]);
         }
 
-        crono.test(() => {}, startTimes.length);
+        coach.test(() => {}, startTimes.length);
 
         // Act
-        let result = crono.medianRunTimeMS;
+        let result = coach.medianRunTimeMS;
 
         // Assert
         assert(result === expected);
 
         hrTimeStub.restore(); // Restore original method
     });
-
-/*
-    it('calls setup fuandfajdjfnon', () => {
-        let testObject = { testFunc: () => {}};
-        let crono = new Crono(testObject, 'testFunc', 10)
-            .setup(x => x.doAThingFirst)
-            .teardown(x => x.destroy);
-
-        crono.test();
-
-        assert(crono.timeSpan <= Time.ms(1));
-    });
-
-     it('calls setup fuandfajdjfnon', () => {
-        let testObject = { testFunc: () => {}};
-        let crono = new Crono()
-            .setup(x => x.doAThingFirst)
-            .teardown(x => x.destroy);
-
-        crono.test(10, testObject.testFunc);
-
-        assert(crono.timeSpan <= Time.ms(1));
-    });*/
 });
