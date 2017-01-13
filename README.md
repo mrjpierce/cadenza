@@ -18,7 +18,8 @@ let coach = new Coach()
         value2 = null;
     });
 
-coach.test(sut.function, 10);
+let numberOfTimesToRunTest = 10;
+coach.test(sut.function, numberOfTimesToRunTest);
 
 assert(coach.medianRunTimeMS <= 50);
 ```

@@ -2,7 +2,7 @@ const assert = require('assert');
 const sinon = require('sinon');
 const itCase = require('mocha-itcase');
 
-const Coach = require('./../lib/coach');
+const Coach = require('./../lib/cadenza').Coach;
 
 describe('Coach', () => {
 
